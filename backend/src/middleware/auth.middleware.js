@@ -28,7 +28,7 @@ export const verifyToken = async (req, res, next) => {
         next();
 
     } catch (error) {
-        throw new ApiError(500, "Something went wrong with token");
+        throw new ApiError(500, "Something went wrong with token",error);
         next();
     }
 }
