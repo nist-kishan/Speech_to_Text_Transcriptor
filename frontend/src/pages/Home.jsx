@@ -1,6 +1,4 @@
-import React from "react";
-
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import HeroImage from "../assets/HomePageImage.png";
@@ -40,9 +38,17 @@ export default function Home() {
   return (
     <div
       ref={containerRef}
-      className="min-h-screen flex flex-col md:flex-row  md:justify-between items-center justify-evenly px-8 md:px-20 sm:mt-10 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-x-hidden"
+      className="min-h-screen flex flex-col md:flex-row md:justify-between items-center justify-evenly 
+      px-6 sm:px-10 md:px-20 
+      mt-20 sm:mt-28 md:mt-32 lg:mt-36 
+      bg-gradient-to-br from-gray-900 via-gray-800 to-black 
+      text-white overflow-x-hidden"
     >
-      <div ref={textRef} className="max-w-xl space-y-6">
+      {/* Left Text Section */}
+      <div
+        ref={textRef}
+        className="max-w-xl space-y-6 md:mt-10 text-center md:text-left"
+      >
         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
           Transcribe <span className="text-indigo-500">Live</span> &{" "}
           <span className="text-indigo-400">Audio Files</span>
@@ -62,19 +68,21 @@ export default function Home() {
         <div ref={btnRef}>
           <Link
             to="/audio"
-            className="inline-block px-6 py-3 text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-lg transform hover:scale-105 transition"
+            className="inline-block px-6 py-3 text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 
+            rounded-xl shadow-lg transform hover:scale-105 transition"
           >
             Get Started
           </Link>
         </div>
       </div>
 
+      {/* Right Image Section */}
       <div className="mt-12 md:mt-0 flex justify-center w-full md:w-1/2">
         <img
           ref={imgRef}
           src={HeroImage}
           alt="Audio Transcription Illustration"
-          className="max-w-sm md:max-w-md drop-shadow-2xl sm:scale-[0.98] md:scale-[0.98] overflow-hidden"
+          className="max-w-xs sm:max-w-sm md:max-w-md drop-shadow-2xl sm:scale-[0.98] md:scale-[0.98] overflow-hidden"
         />
       </div>
     </div>

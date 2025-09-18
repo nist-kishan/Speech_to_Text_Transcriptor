@@ -22,13 +22,13 @@ export const registerUser = asyncHandler(async (req, res) => {
     );
   }
 
-  
-
   const newUser = new User({ name, email, password });
   const savedUser = await newUser.save();
   const userResponse = await User.findById(savedUser._id).select(
     "-password -refreshToken -resetPasswordToken -resetPasswordExpires"
   );
+
+  console.log(userResponse)
 
   if (!userResponse) {
     throw new ApiError(500, "Error in creating user");
