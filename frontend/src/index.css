@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@layer utilities {
+    input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+        -webkit-text-fill-color: white;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+}
+
+@layer utilities {
+
+    /* Slim dark blue scrollbar */
+    .scrollbar-navy::-webkit-scrollbar {
+        width: 6px;
+        /* slim */
+    }
+
+    .scrollbar-navy::-webkit-scrollbar-track {
+        background: rgba(55, 65, 81, 0.3);
+        /* transparent dark track */
+        border-radius: 6px;
+    }
+
+    .scrollbar-navy::-webkit-scrollbar-thumb {
+        background-color: #1e3a8a;
+        /* navy blue */
+        border-radius: 6px;
+    }
+
+    .scrollbar-navy::-webkit-scrollbar-thumb:hover {
+        background-color: #1e40af;
+        /* slightly lighter navy on hover */
+    }
+
+    /* Firefox support */
+    .scrollbar-navy {
+        scrollbar-width: thin;
+        scrollbar-color: #03123b rgba(55, 65, 81, 0.3);
+    }
+}
+
+@theme{
+    --breakpoint-xs: 480px;
+        /* small screens */
+        --breakpoint-sm: 640px;
+        /* small-medium */
+        --breakpoint-md: 850px;
+        /* custom medium */
+        --breakpoint-lg: 1024px;
+        /* large screens */
+        --breakpoint-xl: 1280px;
+        /* extra large */
+        --breakpoint-2xl: 1600px;
+        /* 2x extra large */
+        --breakpoint-3xl: 1920px;
+}
