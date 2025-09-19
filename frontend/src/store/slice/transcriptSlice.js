@@ -82,7 +82,7 @@ const transcriptSlice = createSlice({
       .addCase(uploadAudioThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.lastUploadedTranscript = action.payload;
-        state.history.unshift(action.payload); // Add new transcript on top
+        state.history.unshift(action.payload);
       })
       .addCase(uploadAudioThunk.rejected, (state, action) => {
         state.loading = false;

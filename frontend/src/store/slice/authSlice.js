@@ -1,15 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { signup, login, logout, getCurrentUser } from "../../api/authApi";
+import {
+  signup,
+  login,
+  logout,
+  getCurrentUser,
+  refreshSession,
+} from "../../api/authApi";
 
+// Thunks
 export const signupUser = createAsyncThunk(
   "auth/signup",
   async (data, thunkAPI) => {
     try {
       const res = await signup(data);
-      console.log(res);
       return res.user;
     } catch (err) {
-      console.log(err.response?.data?.message);
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || "Signup failed"
       );
@@ -22,7 +27,7 @@ export const loginUser = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await login(data);
-      return res.data.user;
+      return res.user;
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || "Login failed"
@@ -35,8 +40,9 @@ export const logoutUser = createAsyncThunk(
   "auth/logout",
   async (_, thunkAPI) => {
     try {
-      await logout();
-      return true;
+      const res=await logout();
+      console.log(res)
+      return res;
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || "Logout failed"
@@ -50,15 +56,26 @@ export const fetchCurrentUser = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await getCurrentUser();
-      console.log(res.data.data.user);
+      return res.user;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message);
+    }
+  }
+);
+
+export const refreshUserSession = createAsyncThunk(
+  "auth/refresh",
+  async (_, thunkAPI) => {
+    try {
+      const res = await refreshSession();
       return res.data.user;
-      // eslint-disable-next-line no-unused-vars
     } catch (err) {
       return thunkAPI.rejectWithValue(null);
     }
   }
 );
 
+// Slice
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -70,6 +87,7 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // signup
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -100,19 +118,52 @@ const authSlice = createSlice({
       })
 
       // logout
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
       })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-      // me
+      // fetch current user
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = !!action.payload;
       })
-      .addCase(fetchCurrentUser.rejected, (state) => {
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
+        state.error = action.payload;
+      })
+
+      // refresh session
+      .addCase(refreshUserSession.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(refreshUserSession.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.isAuthenticated = !!action.payload;
+      })
+      .addCase(refreshUserSession.rejected, (state, action) => {
+        state.loading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error = action.payload;
       });
   },
 });

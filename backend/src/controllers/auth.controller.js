@@ -8,13 +8,16 @@ import jwt from "jsonwebtoken";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
+
   if ([name, email].some((field) => field.trim() === "")) {
     throw new ApiError(400, "Name and email are required");
   }
+
   const userExists = await User.findOne({ email });
   if (userExists) {
     throw new ApiError(400, "User already exists with this email");
   }
+
   if (!password || password.length < 6) {
     throw new ApiError(
       400,
@@ -24,20 +27,32 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   const newUser = new User({ name, email, password });
   const savedUser = await newUser.save();
+
   const userResponse = await User.findById(savedUser._id).select(
     "-password -refreshToken -resetPasswordToken -resetPasswordExpires"
   );
-
-  console.log(userResponse)
 
   if (!userResponse) {
     throw new ApiError(500, "Error in creating user");
   }
 
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    savedUser._id
+  );
+
   return res
     .status(201)
-    .json({ message: "User registered successfully", user: userResponse });
+    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, options)
+    .json(
+      new ApiResponse(201, "User registered and logged in successfully", {
+        user: userResponse,
+        accessToken,
+        refreshToken,
+      })
+    );
 });
+
 
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -78,9 +93,10 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
+  
   await User.findByIdAndUpdate(
     req.user._id,
-    { $set: { refreshToken: undefined } },
+    { $set: { refreshToken:"" } },
     { new: true }
   );
   return res
@@ -101,7 +117,6 @@ export const currentUser = asyncHandler(async (req, res) => {
 export const refreshToken = asyncHandler(async (req, res) => {
   const incommingRefreshToken =
     req.cookies?.refreshToken || req.body.refreshToken;
-
   if (!incommingRefreshToken) {
     throw new ApiError(401, "No refresh token provided");
   }

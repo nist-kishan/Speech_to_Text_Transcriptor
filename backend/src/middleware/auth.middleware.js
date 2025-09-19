@@ -12,17 +12,17 @@ export const verifyToken = async (req, res, next) => {
     }
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    const user = await User.findById(decodedToken?.id).select(
-      "-password -refreshToken -resetPasswordToken -resetPasswordExpires"
-    );
 
     if (!decodedToken) {
       throw new ApiError(401, "Invalid token");
     }
+
+    const user = await User.findById(decodedToken?.id).select(
+      "-password -refreshToken -resetPasswordToken -resetPasswordExpires"
+    );
     if (!user) {
       throw new ApiError(404, "User not found");
     }
-
     req.user = user;
     next();
   } catch (error) {

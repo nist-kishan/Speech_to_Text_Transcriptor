@@ -13,6 +13,7 @@ const transcriptRouter = express.Router();
 transcriptRouter
   .route("/local-audio")
   .post(verifyToken, upload.single("audio"), localAudioUpload);
+
 transcriptRouter.get("/history", verifyToken, getUserHistory);
 
 transcriptRouter.route("/history/id/:id").delete(verifyToken, deleteHistoryById);
