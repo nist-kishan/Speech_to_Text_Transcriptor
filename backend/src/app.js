@@ -5,6 +5,7 @@ import authRouter from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { errorMiddleware } from "./middleware/error.miidleware.js";
+import { testRouter } from "./routes/test.route.js";
 dotenv.config();
 
 const app = express();
@@ -21,9 +22,7 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.send("Transcript API is running");
-});
+app.use('/api',testRouter)
 
 app.use("/api/transcripts", transcriptRouter);
 app.use("/api/auth", authRouter);

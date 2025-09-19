@@ -1,10 +1,8 @@
-import React from "react";
-
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import HeroImage from "../assets/HomePageImage.png";
-import { useSelector } from "react-redux";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Home() {
   const containerRef = useRef(null);
@@ -12,7 +10,8 @@ export default function Home() {
   const btnRef = useRef(null);
   const imgRef = useRef(null);
 
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useAuth();
+  const [refreshToken, setRefreshToken] = useState("");
 
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
@@ -40,9 +39,15 @@ export default function Home() {
   return (
     <div
       ref={containerRef}
-      className="min-h-screen flex flex-col md:flex-row  md:justify-between items-center justify-evenly px-8 md:px-20 sm:mt-10 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-x-hidden"
+      className="min-h-screen flex flex-col md:flex-row md:justify-between items-center justify-evenly 
+        px-6 sm:px-10 md:px-20 
+        pt-20 sm:pt-28 md:pt-32 lg:pt-36
+        bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-x-hidden"
     >
-      <div ref={textRef} className="max-w-xl space-y-6">
+      <div
+        ref={textRef}
+        className="max-w-xl space-y-6 md:mt-10 text-center md:text-left"
+      >
         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
           Transcribe <span className="text-indigo-500">Live</span> &{" "}
           <span className="text-indigo-400">Audio Files</span>
@@ -53,16 +58,17 @@ export default function Home() {
           research.
         </p>
 
-        {isAuthenticated && user ? (
-          <p className="text-green-400 font-semibold">
-            Welcome back, {user.name}!
-          </p>
-        ) : null}
+        {isAuthenticated && user && (
+          <div className="text-green-400 space-y-2">
+            <p className="font-semibold">Welcome back, {user.name}!</p>
+          </div>
+        )}
 
         <div ref={btnRef}>
           <Link
             to="/audio"
-            className="inline-block px-6 py-3 text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-lg transform hover:scale-105 transition"
+            className="inline-block px-6 py-3 text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 
+              rounded-xl shadow-lg transform hover:scale-105 transition"
           >
             Get Started
           </Link>
@@ -74,7 +80,7 @@ export default function Home() {
           ref={imgRef}
           src={HeroImage}
           alt="Audio Transcription Illustration"
-          className="max-w-sm md:max-w-md drop-shadow-2xl sm:scale-[0.98] md:scale-[0.98] overflow-hidden"
+          className="max-w-xs sm:max-w-sm md:max-w-md drop-shadow-2xl sm:scale-[0.98] md:scale-[0.98] overflow-hidden"
         />
       </div>
     </div>
