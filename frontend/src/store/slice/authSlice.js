@@ -41,7 +41,6 @@ export const logoutUser = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res=await logout();
-      console.log(res)
       return res;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -70,7 +69,7 @@ export const refreshUserSession = createAsyncThunk(
       const res = await refreshSession();
       return res.data.user;
     } catch (err) {
-      return thunkAPI.rejectWithValue(null);
+      return thunkAPI.rejectWithValue(err.response?.data?.message);
     }
   }
 );

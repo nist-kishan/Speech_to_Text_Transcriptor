@@ -11,7 +11,6 @@ export default function Home() {
   const imgRef = useRef(null);
 
   const { user, isAuthenticated } = useAuth();
-  const [refreshToken, setRefreshToken] = useState("");
 
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });

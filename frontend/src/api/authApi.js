@@ -12,15 +12,15 @@ export const login = async (data) => {
 
 export const logout = async () => {
   const response = await ApiClient.post("/auth/logout");
-  console.log("data", response.data);
   return response.data;
 };
+
 export const getCurrentUser = async () => {
   const response = await ApiClient.get("/auth/me");
   return response.data.data;
 };
+
 export const refreshSession = async () => {
   const response = await ApiClient.get("/auth/refresh");
-  console.log("data", response.data);
   return response.data;
 };

@@ -11,7 +11,6 @@ export const uploadAudioThunk = createAsyncThunk(
   async (file, thunkAPI) => {
     try {
       const res = await uploadAudio(file);
-      console.log(res.data)
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -71,7 +70,11 @@ const transcriptSlice = createSlice({
     error: null,
     lastUploadedTranscript: null,
   },
-  reducers: {},
+  reducers: {
+    clearLastTranscript: (state) => {
+      state.lastUploadedTranscript = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Upload Audio
@@ -116,5 +119,5 @@ const transcriptSlice = createSlice({
       });
   },
 });
-
+export const { clearLastTranscript } = transcriptSlice.actions;
 export default transcriptSlice.reducer;

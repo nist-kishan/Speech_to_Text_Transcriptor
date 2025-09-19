@@ -4,6 +4,7 @@ import {
   fetchHistoryThunk,
   deleteHistoryThunk,
   clearHistoryThunk,
+  clearLastTranscript,
 } from "../store/slice/transcriptSlice";
 import { useEffect } from "react";
 
@@ -20,6 +21,7 @@ export const useTranscript = () => {
   const uploadAudio = (file) => dispatch(uploadAudioThunk(file));
   const deleteHistory = (id) => dispatch(deleteHistoryThunk(id));
   const clearHistory = () => dispatch(clearHistoryThunk());
+  const clearTranscript = () => dispatch(clearLastTranscript());
   const refreshHistory = () => dispatch(fetchHistoryThunk());
 
   return {
@@ -31,5 +33,6 @@ export const useTranscript = () => {
     deleteHistory,
     clearHistory,
     refreshHistory,
+    clearTranscript,
   };
 };

@@ -6,10 +6,16 @@ import gsap from "gsap";
 import { useTranscript } from "../../hooks/useTranscript";
 
 export default function TranscriptViewer() {
-  const { lastUploadedTranscript } = useTranscript();
+  const { lastUploadedTranscript,clearTranscript } = useTranscript();
   const [animatedText, setAnimatedText] = useState("");
   const [finishedTranscripts, setFinishedTranscripts] = useState(new Set());
   const audioref = useRef(null);
+
+  useEffect(() => {
+    clearTranscript();
+    setAnimatedText("");
+    setFinishedTranscripts(new Set());
+  }, []);
 
   useEffect(() => {
     if (!lastUploadedTranscript?.transcriptText) return;
@@ -21,7 +27,6 @@ export default function TranscriptViewer() {
       return;
     }
 
-    // Animate transcript
     const text = lastUploadedTranscript.transcriptText;
     setAnimatedText("");
     let index = 0;
@@ -37,7 +42,6 @@ export default function TranscriptViewer() {
           { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 0.6 }
         );
-        // Mark transcript as finished
         setFinishedTranscripts((prev) => new Set(prev).add(transcriptId));
       }
     };
