@@ -43,7 +43,7 @@ A full-stack web application for **audio transcription** and **live speech-to-te
 
 - **Frontend**
   - React
-  - Tailwind CSS / any UI library
+  - Tailwind CSS
   - Socket.io-client
 
 - **Backend**
@@ -54,7 +54,7 @@ A full-stack web application for **audio transcription** and **live speech-to-te
   - Deepgram API (for speech-to-text)
 
 - **Database**
-  - MongoDB / any preferred DB for storing user accounts and transcription history
+  - MongoDB 
 
 ---
 
@@ -62,8 +62,8 @@ A full-stack web application for **audio transcription** and **live speech-to-te
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/nist-kishan/Speech_to_Text_Transcriptor.git
+   cd Speech_to_Text_Transcriptor
 
 Install dependencies
 
