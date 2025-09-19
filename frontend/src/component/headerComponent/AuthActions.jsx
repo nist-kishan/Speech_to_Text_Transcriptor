@@ -2,16 +2,20 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 import { LogIn, LogOut, UserPlus, User } from "lucide-react";
-import { useSelector, useDispatch } from "react-redux";
-import { logoutUser } from "../../store/slice/authSlice";
+import toast from "react-hot-toast";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function AuthActions({ isMobile = false, onClose }) {
-  const dispatch = useDispatch();
-  const { user, loading, isAuthenticated } = useSelector((state) => state.auth);
+  const { user, loading, isAuthenticated ,logout} = useAuth();
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    if (isMobile) onClose?.();
+  const handleLogout = async () => {
+    try {
+      const result = await logout().unwrap();
+      toast.success(result?.message || "Logged out successfully");
+      if (isMobile) onClose?.();
+    } catch (err) {
+      toast.error(err?.message || "Logout failed");
+    }
   };
 
   const buttonBaseClasses =

@@ -1,9 +1,7 @@
-import React from "react";
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { gsap } from "gsap";
 import toast from "react-hot-toast";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import Inputbox from "../component/ui/Inputbox";
 import Button from "../component/ui/Button";
@@ -13,13 +11,11 @@ export default function Login() {
   const { loading, isAuthenticated, login, error } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   useEffect(() => {
@@ -32,18 +28,16 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await login(form);
-
-    if (res.meta.requestStatus === "fulfilled") {
-      toast.success("Login successful! 🎉");
+    try {
+      await login(form).unwrap();
+      toast.success("Login successful!");
+      setTimeout(() => navigate("/"), 1200);
+    } catch (err) {
+      if (err !== "Unauthorized" && err !== "refreshToken") {
+        toast.error(err || "Invalid credentials!");
+      }
     }
   };
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
 
   if (isAuthenticated) return <Navigate to="/" />;
 
