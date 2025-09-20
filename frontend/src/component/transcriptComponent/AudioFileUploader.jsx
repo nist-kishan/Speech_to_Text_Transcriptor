@@ -7,7 +7,7 @@ import { useTranscript } from "../../hooks/useTranscript";
 export default function AudioFileUploader() {
   const fileInputRef = useRef(null);
   const [audio, setAudio] = useState(null);
-  const { uploadAudio, loading } = useTranscript();
+  const { uploadAudio, loading, } = useTranscript();
 
   const handleFileSelect = (e) => setAudio(e.target.files[0]);
 

@@ -1,12 +1,13 @@
-import React from "react";
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import TranscriptViewer from "../component/transcriptComponent/TranscriptViewer";
 import ErrorMessage from "../component/transcriptComponent/ErrorMessage";
 import TranscriptorHeader from "../component/transcriptComponent/TranscriptorHeader";
 import AudioFileUploader from "../component/transcriptComponent/AudioFileUploader";
+import { useTranscript } from "../hooks/useTranscript";
 
 export default function Transcriptor() {
+  const { error } = useTranscript();
   const cardRef = useRef(null);
 
   useEffect(() => {
@@ -26,8 +27,8 @@ export default function Transcriptor() {
       >
         <TranscriptorHeader />
         <AudioFileUploader />
-        <ErrorMessage />
-        <TranscriptViewer />
+        {/* Show error message if error exists, otherwise show transcript */}
+        {error ? <ErrorMessage message={error} /> : <TranscriptViewer />}
       </div>
     </div>
   );
