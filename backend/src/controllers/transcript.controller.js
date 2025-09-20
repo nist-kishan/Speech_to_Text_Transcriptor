@@ -42,7 +42,6 @@ export const localAudioUpload = asyncHandler(async (req, res) => {
     details: `Uploaded and transcribed audio file: ${audio.originalname}`,
   });
 
-  // 3️⃣ Update user's history array
   await User.findByIdAndUpdate(userId, {
     $push: { history: historyEntry._id },
   });
